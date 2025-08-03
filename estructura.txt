@@ -1,0 +1,46 @@
+consultorio-medico/
+├── frontend/
+│   ├── css/
+│   │   ├── style.css
+│   │   └── shadcn.css
+│   ├── js/
+│   │   ├── auth.js
+│   │   ├── dashboard.js
+│   │   ├── pacientes.js
+│   │   ├── turnos.js
+│   │   ├── recetas.js
+│   │   └── reportes.js
+│   ├── index.html
+│   ├── login.html
+│   ├── dashboard.html
+│   ├── pacientes.html
+│   ├── paciente-detalle.html
+│   ├── turnos.html
+│   ├── recetas.html
+│   └── reportes.html
+└── backend/
+    ├── controllers/
+    │   ├── authController.js
+    │   ├── pacienteController.js
+    │   ├── turnoController.js
+    │   ├── recetaController.js
+    │   └── historialController.js
+    ├── models/
+    │   ├── usuario.js
+    │   ├── paciente.js
+    │   ├── turno.js
+    │   ├── receta.js
+    │   └── historial.js
+    ├── routes/
+    │   ├── auth.js
+    │   ├── pacientes.js
+    │   ├── turnos.js
+    │   ├── recetas.js
+    │   └── historial.js
+    ├── middlewares/
+    │   ├── auth.js
+    │   └── errorHandler.js
+    ├── config/
+    │   └── db.js
+    ├── .env
+    └── server.js

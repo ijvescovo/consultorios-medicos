@@ -1,0 +1,115 @@
+# ===================================
+# ARCHIVOS SENSIBLES Y CONFIGURACIÓN
+# ===================================
+*.env
+.env
+.env.local
+.env.production
+.env.development
+config/database.json
+
+# ===================================
+# NODE.JS
+# ===================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+.npm
+.yarn-integrity
+
+# ===================================
+# LOGS Y DEBUGGING
+# ===================================
+logs/
+*.log
+debug/
+.nyc_output
+
+# ===================================
+# RUNTIME Y CACHE
+# ===================================
+.cache/
+.tmp/
+.temp/
+*.pid
+*.seed
+*.pid.lock
+.coverage/
+
+# ===================================
+# BASE DE DATOS LOCAL
+# ===================================
+BaseDeDatos/
+*.sqlite
+*.sqlite3
+*.db
+
+# ===================================
+# SISTEMA OPERATIVO
+# ===================================
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+
+# ===================================
+# IDEs Y EDITORES
+# ===================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ===================================
+# ARCHIVOS DE BACKUP
+# ===================================
+*.backup
+*.bak
+*.tmp
+
+# ===================================
+# CERTIFICADOS Y CLAVES
+# ===================================
+*.pem
+*.key
+*.cert
+*.crt
+
+# ===================================
+# UPLOADS Y ARCHIVOS TEMPORALES
+# ===================================
+uploads/
+temp/
+public/uploads/
+
+# ===================================
+# BUILDS Y DISTRIBUCIÓN
+# ===================================
+build/
+dist/
+.next/
+out/
+
+# ===================================
+# TESTING
+# ===================================
+coverage/
+.nyc_output/
+test-results/
+
+# ===================================
+# DOCUMENTACIÓN GENERADA
+# ===================================
+docs/generated/
+api-docs/

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Login Admin</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-box {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .btn {
+            background: #1e3a8a;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .result {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Portal de Administración</h1>
+    
+    <div class="test-box">
+        <h3>Test 1: Verificar Login de Admin</h3>
+        <p>Credenciales: admin@consultorio.com / admin123</p>
+        <button class="btn" onclick="testAdminLogin()">Probar Login Admin</button>
+        <div id="loginResult" class="result" style="display: none;"></div>
+    </div>
+    
+    <div class="test-box">
+        <h3>Test 2: Verificar Redirección</h3>
+        <p>El admin debería ir a admin-portal.html y otros usuarios a dashboard.html</p>
+        <button class="btn" onclick="testRedirect()">Probar Redirección</button>
+        <div id="redirectResult" class="result" style="display: none;"></div>
+    </div>
+    
+    <div class="test-box">
+        <h3>Enlaces Directos</h3>
+        <a href="login.html" class="btn">🔐 Ir a Login</a>
+        <a href="admin-portal.html" class="btn">🛡️ Portal Admin</a>
+        <a href="dashboard.html" class="btn">📊 Dashboard Normal</a>
+    </div>
+
+    <script>
+        async function testAdminLogin() {
+            const resultDiv = document.getElementById('loginResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '⏳ Probando login...';
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: 'admin@consultorio.com',
+                        password: 'admin123'
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        ✅ <strong>Login exitoso!</strong><br>
+                        📧 Email: ${data.email}<br>
+                        👤 Nombre: ${data.nombre} ${data.apellido}<br>
+                        🔒 Rol: ${data.rol}<br>
+                        🎫 Token: ${data.token ? 'Recibido' : 'No recibido'}
+                    `;
+                    
+                    // Guardar en localStorage para pruebas
+                    localStorage.setItem('testToken', data.token);
+                    localStorage.setItem('testUser', JSON.stringify(data));
+                    
+                } else {
+                    resultDiv.innerHTML = `❌ Error: ${data.error || 'Login fallido'}`;
+                }
+                
+            } catch (error) {
+                resultDiv.innerHTML = `❌ Error de conexión: ${error.message}`;
+            }
+        }
+        
+        function testRedirect() {
+            const resultDiv = document.getElementById('redirectResult');
+            resultDiv.style.display = 'block';
+            
+            const userData = localStorage.getItem('testUser');
+            if (!userData) {
+                resultDiv.innerHTML = '⚠️ Primero ejecuta el test de login para obtener datos de usuario';
+                return;
+            }
+            
+            const user = JSON.parse(userData);
+            
+            // Simular la lógica de redirección
+            let targetUrl = 'dashboard.html'; // Default
+            
+            if (user.rol === 'admin' || user.rol === 'administrador') {
+                targetUrl = 'admin-portal.html';
+            }
+            
+            resultDiv.innerHTML = `
+                ✅ <strong>Lógica de redirección:</strong><br>
+                👤 Usuario: ${user.nombre} (${user.rol})<br>
+                🎯 Destino: <strong>${targetUrl}</strong><br>
+                <br>
+                <a href="${targetUrl}" class="btn" style="display: inline-block; text-decoration: none;">
+                    🚀 Ir a ${targetUrl}
+                </a>
+            `;
+        }
+    </script>
+</body>
+</html>

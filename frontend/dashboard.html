@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Principal</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">Consultorio Médico</div>
+        <nav>
+            <ul>
+                <li><a href="#" class="active">Dashboard</a></li>
+                <li><a href="pacientes.html">Pacientes</a></li>
+                <li><a href="turnos.html">Turnos</a></li>
+                <li><a href="recetas.html">Recetas</a></li>
+                <li><a href="reportes.html">Reportes</a></li>
+            </ul>
+        </nav>
+        <div class="user-menu">
+            <span id="userName"></span>
+            <button id="logoutBtn">Cerrar Sesión</button>
+        </div>
+    </header>
+
+    <main class="dashboard">
+        <div class="sidebar">
+            <h3>Accesos Rápidos</h3>
+            <ul>
+                <li><a href="#" id="quickNewPatient">Nuevo Paciente</a></li>
+                <li><a href="#" id="quickNewAppointment">Nuevo Turno</a></li>
+                <li><a href="#" id="quickNewPrescription">Nueva Receta</a></li>
+                <li><a href="#" id="quickImportPAMI">Importar PAMI</a></li>
+            </ul>
+            
+            <h3 id="adminSection">Administración</h3>
+            <ul id="adminMenu">
+                <li><a href="admin-portal.html">🛡️ Portal de Administración</a></li>
+                <li><a href="usuarios.html">👥 Gestión de Usuarios</a></li>
+                <li><a href="#" id="quickSystemConfig">⚙️ Configuración</a></li>
+                <li><a href="#" id="quickBackup">💾 Respaldos</a></li>
+            </ul>
+            
+            <h3>Estadísticas</h3>
+            <div class="stats">
+                <div class="stat-card">
+                    <h4>Turnos Hoy</h4>
+                    <p id="todayAppointments">0</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Pacientes</h4>
+                    <p id="totalPatients">0</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <h2>Agenda del Día</h2>
+            <div id="calendar"></div>
+            
+            <div class="dashboard-section">
+                <h2>Pacientes Recientes</h2>
+                <div id="recentPatients"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

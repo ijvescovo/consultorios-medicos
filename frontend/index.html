@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultorio Médico</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta name="description" content="Sistema de gestión médica - Administración de pacientes, turnos y historiales médicos">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="spinner"></div>
+        <p>Cargando sistema...</p>
+    </div>
+
+    <div class="container">
+        <header class="main-header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-stethoscope"></i>
+                    <h1>Sistema de Gestión Médica</h1>
+                </div>
+                <nav class="nav-menu">
+                    <ul>
+                        <li><a href="#inicio" class="nav-link active">Inicio</a></li>
+                        <li><a href="#servicios" class="nav-link">Servicios</a></li>
+                        <li><a href="#nosotros" class="nav-link">Nosotros</a></li>
+                        <li><a href="#contacto" class="nav-link">Contacto</a></li>
+                    </ul>
+                </nav>
+                <div class="header-actions">
+                    <button class="btn-outline" onclick="showDemo()">
+                        <i class="fas fa-play"></i> Demo
+                    </button>
+                    <a href="login.html" class="btn-primary">
+                        <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <section id="inicio" class="hero-section">
+                <div class="hero-content">
+                    <h2 class="hero-title">Administración de pacientes, turnos y historiales médicos</h2>
+                    <p class="hero-subtitle">Digitaliza tu consultorio con nuestro sistema integral de gestión médica</p>
+                    
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <span class="stat-number" data-target="500">0</span>
+                            <span class="stat-label">Consultorios</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" data-target="10000">0</span>
+                            <span class="stat-label">Pacientes</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" data-target="99">0</span>
+                            <span class="stat-label">% Satisfacción</span>
+                        </div>
+                    </div>
+
+                    <div class="hero-actions">
+                        <button class="btn-primary btn-large" onclick="showContactForm()">
+                            <i class="fas fa-rocket"></i> Comenzar Ahora
+                        </button>
+                        <button class="btn-outline btn-large" onclick="showFeatures()">
+                            <i class="fas fa-info-circle"></i> Más Información
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="servicios" class="features-section">
+                <div class="section-header">
+                    <h2>Características Principales</h2>
+                    <p>Todo lo que necesitas para modernizar tu consultorio médico</p>
+                </div>
+                
+                <div class="features-grid">
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="feature-icon">
+                            <i class="fas fa-file-medical"></i>
+                        </div>
+                        <h3>Historial Médico</h3>
+                        <p>Acceso completo al historial clínico de cada paciente con búsqueda avanzada y exportación de datos</p>
+                        <div class="feature-benefits">
+                            <span class="benefit">Seguro</span>
+                            <span class="benefit">Completo</span>
+                            <span class="benefit">Exportable</span>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="feature-icon">
+                            <i class="fas fa-prescription-bottle-alt"></i>
+                        </div>
+                        <h3>Recetas Electrónicas</h3>
+                        <p>Genera recetas con firma digital y código QR para validación automática en farmacias</p>
+                        <div class="feature-benefits">
+                            <span class="benefit">Digital</span>
+                            <span class="benefit">Verificable</span>
+                            <span class="benefit">Legal</span>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="feature-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <h3>Turnos Inteligentes</h3>
+                        <p>Gestión de citas y asignación automática de consultorios con notificaciones por email/SMS</p>
+                        <div class="feature-benefits">
+                            <span class="benefit">Automático</span>
+                            <span class="benefit">Notificaciones</span>
+                            <span class="benefit">Optimizado</span>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                        <div class="feature-icon">
+                            <i class="fas fa-file-excel"></i>
+                        </div>
+                        <h3>Importación PAMI</h3>
+                        <p>Carga masiva de pacientes desde archivos Excel con validación automática de datos</p>
+                        <div class="feature-benefits">
+                            <span class="benefit">Masivo</span>
+                            <span class="benefit">Validado</span>
+                            <span class="benefit">Compatible</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="nosotros" class="testimonials-section">
+                <div class="section-header">
+                    <h2>Lo que dicen nuestros usuarios</h2>
+                    <p>Médicos y administradores que ya confían en nosotros</p>
+                </div>
+                
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <p>"El sistema revolucionó completamente mi consulta. Ahora puedo dedicar más tiempo a mis pacientes y menos al papeleo."</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <img src="assets/images/doctor1.jpg" alt="Dr. María González" class="author-avatar">
+                            <div class="author-info">
+                                <h4>Dr. María González</h4>
+                                <span>Cardióloga</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <p>"La gestión de turnos se simplificó enormemente. Los pacientes pueden agendar online y reciben recordatorios automáticos."</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <img src="assets/images/admin1.jpg" alt="Ana Rodríguez" class="author-avatar">
+                            <div class="author-info">
+                                <h4>Ana Rodríguez</h4>
+                                <span>Administradora</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="contacto" class="contact-section">
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <h2>¿Listo para digitalizar tu consultorio?</h2>
+                        <p>Contáctanos y te ayudaremos a implementar el sistema perfecto para tu práctica médica.</p>
+                        
+                        <div class="contact-methods">
+                            <div class="contact-method">
+                                <i class="fas fa-phone"></i>
+                                <span>+54 11 4567-8900</span>
+                            </div>
+                            <div class="contact-method">
+                                <i class="fas fa-envelope"></i>
+                                <span>info@consultoriomedico.com</span>
+                            </div>
+                            <div class="contact-method">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Av. Corrientes 1234, CABA</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-form">
+                        <form id="contactForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="name">Nombre completo</label>
+                                    <input type="text" id="name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" id="email" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="specialty">Especialidad médica</label>
+                                <select id="specialty" required>
+                                    <option value="">Seleccionar...</option>
+                                    <option value="cardiologia">Cardiología</option>
+                                    <option value="dermatologia">Dermatología</option>
+                                    <option value="ginecologia">Ginecología</option>
+                                    <option value="neurologia">Neurología</option>
+                                    <option value="pediatria">Pediatría</option>
+                                    <option value="traumatologia">Traumatología</option>
+                                    <option value="otro">Otro</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Mensaje</label>
+                                <textarea id="message" rows="4" placeholder="Cuéntanos sobre tu consultorio y qué necesitas..."></textarea>
+                            </div>
+                            <button type="submit" class="btn-primary btn-full">
+                                <i class="fas fa-paper-plane"></i>
+                                Enviar Consulta
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="main-footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-stethoscope"></i>
+                        <span>Consultorio Médico</span>
+                    </div>
+                    <p>Digitalizando la medicina, humanizando la atención.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Enlaces</h4>
+                    <ul>
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="#servicios">Servicios</a></li>
+                        <li><a href="#nosotros">Nosotros</a></li>
+                        <li><a href="#contacto">Contacto</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Soporte</h4>
+                    <ul>
+                        <li><a href="#">Documentación</a></li>
+                        <li><a href="#">Centro de Ayuda</a></li>
+                        <li><a href="#">Chat en vivo</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Síguenos</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Sistema de Consultorio Médico. Todos los derechos reservados.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modals -->
+    <div id="demoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Demo del Sistema</h3>
+                <button class="close-modal" onclick="closeModal('demoModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>¡Próximamente! Podrás probar todas las funcionalidades del sistema en nuestro demo interactivo.</p>
+                <div class="demo-features">
+                    <div class="demo-feature">
+                        <i class="fas fa-check"></i>
+                        <span>Gestión de pacientes</span>
+                    </div>
+                    <div class="demo-feature">
+                        <i class="fas fa-check"></i>
+                        <span>Agenda de turnos</span>
+                    </div>
+                    <div class="demo-feature">
+                        <i class="fas fa-check"></i>
+                        <span>Historiales médicos</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

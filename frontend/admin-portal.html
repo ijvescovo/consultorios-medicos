@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Administración - Consultorio Médico</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.css" rel="stylesheet">
+</head>
+<body class="admin-portal">
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="spinner"></div>
+        <p>Cargando Portal de Administración...</p>
+    </div>
+
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="admin-logo">
+                <i class="fas fa-shield-alt"></i>
+                <h2>Admin Portal</h2>
+            </div>
+            
+            <nav class="admin-nav">
+                <ul>
+                    <li>
+                        <a href="#dashboard" class="nav-item active" data-section="dashboard">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#usuarios" class="nav-item" data-section="usuarios">
+                            <i class="fas fa-users"></i>
+                            <span>Gestión de Usuarios</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#permisos" class="nav-item" data-section="permisos">
+                            <i class="fas fa-key"></i>
+                            <span>Roles y Permisos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#auditoria" class="nav-item" data-section="auditoria">
+                            <i class="fas fa-clipboard-list"></i>
+                            <span>Auditoría</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#configuracion" class="nav-item" data-section="configuracion">
+                            <i class="fas fa-cog"></i>
+                            <span>Configuración</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="admin-user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <div class="user-details">
+                    <span class="user-name" id="adminUserName">Administrador</span>
+                    <span class="user-role">Super Admin</span>
+                </div>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Header -->
+            <header class="admin-header">
+                <div class="header-left">
+                    <button class="sidebar-toggle" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 id="pageTitle">Dashboard</h1>
+                </div>
+                
+                <div class="header-right">
+                    <div class="notifications">
+                        <button class="notification-btn">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </button>
+                    </div>
+                    
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Buscar usuarios, logs..." id="globalSearch">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="admin-content">
+                <!-- Dashboard Section -->
+                <section id="dashboard-section" class="content-section active">
+                    <div class="dashboard-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="totalUsuarios">0</h3>
+                                <p>Total Usuarios</p>
+                                <span class="stat-change positive">+12% este mes</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-user-check"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="usuariosActivos">0</h3>
+                                <p>Usuarios Activos</p>
+                                <span class="stat-change positive">+5% esta semana</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="usuariosNuevos">0</h3>
+                                <p>Nuevos este mes</p>
+                                <span class="stat-change neutral">Sin cambios</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>99.9%</h3>
+                                <p>Seguridad</p>
+                                <span class="stat-change positive">Óptimo</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-charts">
+                        <div class="chart-container">
+                            <h3>Usuarios por Rol</h3>
+                            <canvas id="rolesChart"></canvas>
+                        </div>
+                        
+                        <div class="chart-container">
+                            <h3>Actividad Reciente</h3>
+                            <canvas id="actividadChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="recent-activity">
+                        <h3>Actividad Reciente</h3>
+                        <div class="activity-list" id="actividadReciente">
+                            <!-- Se carga dinámicamente -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Usuarios Section -->
+                <section id="usuarios-section" class="content-section">
+                    <div class="section-header">
+                        <div class="header-left">
+                            <h2>Gestión de Usuarios</h2>
+                            <p>Administra todos los usuarios del sistema</p>
+                        </div>
+                        <div class="header-actions">
+                            <button class="btn-secondary" onclick="exportarUsuarios()">
+                                <i class="fas fa-download"></i> Exportar
+                            </button>
+                            <button class="btn-primary" onclick="mostrarModalCrearUsuario()">
+                                <i class="fas fa-plus"></i> Crear Usuario
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="filters-section">
+                        <div class="filter-group">
+                            <label>Buscar:</label>
+                            <input type="text" id="searchUsuarios" placeholder="Nombre, email...">
+                        </div>
+                        <div class="filter-group">
+                            <label>Rol:</label>
+                            <select id="filterRol">
+                                <option value="">Todos</option>
+                                <option value="admin">Administrador</option>
+                                <option value="doctor">Doctor</option>
+                                <option value="recepcionista">Recepcionista</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Estado:</label>
+                            <select id="filterEstado">
+                                <option value="todos">Todos</option>
+                                <option value="activos">Activos</option>
+                                <option value="inactivos">Inactivos</option>
+                            </select>
+                        </div>
+                        <button class="btn-outline" onclick="limpiarFiltros()">
+                            <i class="fas fa-times"></i> Limpiar
+                        </button>
+                    </div>
+                    
+                    <div class="usuarios-table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" id="selectAll">
+                                    </th>
+                                    <th>Usuario</th>
+                                    <th>Email</th>
+                                    <th>Rol</th>
+                                    <th>Estado</th>
+                                    <th>Último Acceso</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usuariosTableBody">
+                                <!-- Se carga dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="pagination" id="usuariosPagination">
+                        <!-- Se carga dinámicamente -->
+                    </div>
+                </section>
+
+                <!-- Permisos Section -->
+                <section id="permisos-section" class="content-section">
+                    <div class="section-header">
+                        <h2>Roles y Permisos</h2>
+                        <p>Configura los permisos para cada rol</p>
+                    </div>
+                    
+                    <div class="roles-grid">
+                        <div class="role-card" data-role="admin">
+                            <div class="role-header">
+                                <i class="fas fa-crown"></i>
+                                <h3>Administrador</h3>
+                                <span class="role-count" id="adminCount">0</span>
+                            </div>
+                            <div class="role-permissions">
+                                <div class="permission-item">
+                                    <i class="fas fa-check"></i>
+                                    <span>Control total del sistema</span>
+                                </div>
+                                <div class="permission-item">
+                                    <i class="fas fa-check"></i>
+                                    <span>Gestión de usuarios</span>
+                                </div>
+                                <div class="permission-item">
+                                    <i class="fas fa-check"></i>
+                                    <span>Configuración avanzada</span>
+                                </div>
+                            </div>
+                            <button class="btn-outline" onclick="editarPermisos('admin')">
+                                Editar Permisos
+                            </button>
+                        </div>
+                        
+                        <div class="role-card" data-role="doctor">
+                            <div class="role-header">
+                                <i class="fas fa-user-md"></i>
+                                <h3>Doctor</h3>
+                                <span class="role-count" id="doctorCount">0</span>
+                            </div>
+                            <div class="role-permissions">
+                                <div class="permission-item">
+                                    <i class="fas fa-check"></i>
+                                    <span>Gestión de pacientes</span>
+                                </div>
+                                <div class="permission-item">
+                                    <i class="fas fa-check"></i>
+                                    <span>Historiales médicos</span>
+                                </div>
+                                <div class="permission-item">
+                                    <i class="fas fa-check"></i>
+                                    <span>Recetas electrónicas</span>
+                                </div>
+                            </div>
+                            <button class="btn-outline" onclick="editarPermisos('doctor')">
+                                Editar Permisos
+                            </button>
+                        </div>
+                        
+                        <div class="role-card" data-role="recepcionista">
+                            <div class="role-header">
+                                <i class="fas fa-desk"></i>
+                                <h3>Recepcionista</h3>
+                                <span class="role-count" id="recepcionistaCount">0</span>
+                            </div>
+                            <div class="role-permissions">
+                                <div class="permission-item">
+                                    <i class="fas fa-check"></i>
+                                    <span>Gestión de turnos</span>
+                                </div>
+                                <div class="permission-item">
+                                    <i class="fas fa-check"></i>
+                                    <span>Datos de pacientes</span>
+                                </div>
+                                <div class="permission-item">
+                                    <i class="fas fa-times"></i>
+                                    <span>Acceso limitado</span>
+                                </div>
+                            </div>
+                            <button class="btn-outline" onclick="editarPermisos('recepcionista')">
+                                Editar Permisos
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Auditoría Section -->
+                <section id="auditoria-section" class="content-section">
+                    <div class="section-header">
+                        <h2>Auditoría y Logs</h2>
+                        <p>Monitorea toda la actividad del sistema</p>
+                    </div>
+                    
+                    <div class="audit-filters">
+                        <div class="filter-group">
+                            <label>Usuario:</label>
+                            <select id="auditUsuario">
+                                <option value="">Todos los usuarios</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Desde:</label>
+                            <input type="date" id="auditDesde">
+                        </div>
+                        <div class="filter-group">
+                            <label>Hasta:</label>
+                            <input type="date" id="auditHasta">
+                        </div>
+                        <button class="btn-primary" onclick="cargarLogs()">
+                            <i class="fas fa-search"></i> Buscar
+                        </button>
+                    </div>
+                    
+                    <div class="logs-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha/Hora</th>
+                                    <th>Usuario</th>
+                                    <th>Acción</th>
+                                    <th>IP</th>
+                                    <th>Detalles</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logsTableBody">
+                                <!-- Se carga dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Configuración Section -->
+                <section id="configuracion-section" class="content-section">
+                    <div class="section-header">
+                        <h2>Configuración del Sistema</h2>
+                        <p>Ajustes avanzados y configuraciones</p>
+                    </div>
+                    
+                    <div class="config-tabs">
+                        <button class="tab-btn active" data-tab="seguridad">Seguridad</button>
+                        <button class="tab-btn" data-tab="notificaciones">Notificaciones</button>
+                        <button class="tab-btn" data-tab="backup">Backup</button>
+                        <button class="tab-btn" data-tab="general">General</button>
+                    </div>
+                    
+                    <div class="config-content">
+                        <div id="seguridad-tab" class="tab-content active">
+                            <h3>Configuración de Seguridad</h3>
+                            <div class="config-group">
+                                <label>Tiempo de sesión (minutos):</label>
+                                <input type="number" value="60" id="sessionTimeout">
+                            </div>
+                            <div class="config-group">
+                                <label>Intentos máximos de login:</label>
+                                <input type="number" value="3" id="maxLoginAttempts">
+                            </div>
+                            <div class="config-group">
+                                <label>Requerir cambio de contraseña cada:</label>
+                                <select id="passwordExpiry">
+                                    <option value="30">30 días</option>
+                                    <option value="60">60 días</option>
+                                    <option value="90" selected>90 días</option>
+                                    <option value="180">180 días</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div id="notificaciones-tab" class="tab-content">
+                            <h3>Configuración de Notificaciones</h3>
+                            <div class="config-group">
+                                <label>Email de administrador:</label>
+                                <input type="email" value="admin@consultorio.com" id="adminEmail">
+                            </div>
+                        </div>
+                        
+                        <div id="backup-tab" class="tab-content">
+                            <h3>Backup y Respaldo</h3>
+                            <div class="backup-actions">
+                                <button class="btn-primary" onclick="crearBackup()">
+                                    <i class="fas fa-database"></i> Crear Backup
+                                </button>
+                                <button class="btn-secondary" onclick="programarBackup()">
+                                    <i class="fas fa-clock"></i> Programar Automático
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="general-tab" class="tab-content">
+                            <h3>Configuración General</h3>
+                            <div class="config-group">
+                                <label>Nombre del sistema:</label>
+                                <input type="text" value="Sistema de Consultorio Médico" id="systemName">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="config-actions">
+                        <button class="btn-secondary" onclick="resetearConfiguracion()">
+                            Restaurar Valores por Defecto
+                        </button>
+                        <button class="btn-primary" onclick="guardarConfiguracion()">
+                            <i class="fas fa-save"></i> Guardar Cambios
+                        </button>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Modal Crear Usuario -->
+    <div id="modalCrearUsuario" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-plus"></i> Crear Nuevo Usuario</h3>
+                <button class="close-modal" onclick="cerrarModal('modalCrearUsuario')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formCrearUsuario">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nuevoNombre">Nombre *</label>
+                            <input type="text" id="nuevoNombre" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="nuevoApellido">Apellido *</label>
+                            <input type="text" id="nuevoApellido" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nuevoEmail">Email *</label>
+                            <input type="email" id="nuevoEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="nuevoRol">Rol *</label>
+                            <select id="nuevoRol" required onchange="mostrarCamposRol()">
+                                <option value="">Seleccionar...</option>
+                                <option value="admin">Administrador</option>
+                                <option value="doctor">Doctor</option>
+                                <option value="recepcionista">Recepcionista</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nuevoPassword">Contraseña Temporal *</label>
+                        <div class="password-input">
+                            <input type="password" id="nuevoPassword" required>
+                            <button type="button" onclick="generarPassword()" class="btn-icon">
+                                <i class="fas fa-random"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Campos específicos para doctor -->
+                    <div id="camposMedico" class="campos-rol" style="display: none;">
+                        <h4>Información Médica</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="matricula">Matrícula</label>
+                                <input type="text" id="matricula">
+                            </div>
+                            <div class="form-group">
+                                <label for="especialidad">Especialidad</label>
+                                <input type="text" id="especialidad">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="telefono">Teléfono</label>
+                            <input type="tel" id="telefono">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <h4>Permisos Específicos</h4>
+                        <div class="permissions-grid" id="permisosGrid">
+                            <!-- Se carga dinámicamente según el rol -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="cerrarModal('modalCrearUsuario')">
+                    Cancelar
+                </button>
+                <button type="submit" form="formCrearUsuario" class="btn-primary">
+                    <i class="fas fa-save"></i> Crear Usuario
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="js/admin-portal.js"></script>
+</body>
+</html>

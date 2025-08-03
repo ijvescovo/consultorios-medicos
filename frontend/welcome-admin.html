@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Administración - Consultorio Médico</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .welcome-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .welcome-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 1rem;
+        }
+        .welcome-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+        }
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: #1e3a8a;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .feature-card h3 {
+            color: #1e3a8a;
+            margin-bottom: 1rem;
+        }
+        .cta-section {
+            background: #f8fafc;
+            padding: 3rem 2rem;
+            border-radius: 1rem;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+        .btn-primary {
+            background: #1e3a8a;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #1e40af;
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            background: white;
+            color: #1e3a8a;
+            border: 2px solid #1e3a8a;
+        }
+        .btn-secondary:hover {
+            background: #1e3a8a;
+            color: white;
+        }
+        .credentials-box {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        .credentials-box h4 {
+            color: #92400e;
+            margin-bottom: 0.5rem;
+        }
+        .credential-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .copy-btn {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-container">
+        <div class="welcome-header">
+            <h1>
+                <i class="fas fa-shield-alt"></i>
+                Portal de Administración
+            </h1>
+            <p>Sistema avanzado de gestión y control de usuarios tipo Active Directory</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-users-cog"></i>
+                </div>
+                <h3>Gestión Completa de Usuarios</h3>
+                <p>Crea, edita y administra usuarios con diferentes roles: administradores, doctores y recepcionistas. Control total sobre permisos y accesos.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-key"></i>
+                </div>
+                <h3>Sistema de Permisos Granular</h3>
+                <p>Asigna permisos específicos a cada rol y usuario. Control fino sobre qué puede hacer cada persona en el sistema.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-virus"></i>
+                </div>
+                <h3>Seguridad Avanzada</h3>
+                <p>Bloqueo automático por intentos fallidos, reseteo de contraseñas, control de sesiones y auditoría completa de actividades.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Dashboard Ejecutivo</h3>
+                <p>Visualiza estadísticas en tiempo real, actividad de usuarios, gráficos interactivos y métricas del sistema.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+                <h3>Auditoría Completa</h3>
+                <p>Logs detallados de todas las actividades, trazabilidad completa de acciones y reportes de seguridad.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-cogs"></i>
+                </div>
+                <h3>Configuración Avanzada</h3>
+                <p>Personaliza el sistema según tus necesidades. Configuración de seguridad, notificaciones, backups automáticos y más.</p>
+            </div>
+        </div>
+
+        <div class="credentials-box">
+            <h4><i class="fas fa-exclamation-triangle"></i> Credenciales de Acceso por Defecto</h4>
+            <div class="credential-item">
+                <strong>Usuario:</strong>
+                <span>admin@consultorio.com <button class="copy-btn" onclick="copyToClipboard('admin@consultorio.com')">Copiar</button></span>
+            </div>
+            <div class="credential-item">
+                <strong>Contraseña:</strong>
+                <span>admin123 <button class="copy-btn" onclick="copyToClipboard('admin123')">Copiar</button></span>
+            </div>
+            <p style="margin-top: 1rem; color: #92400e; font-size: 0.875rem;">
+                <strong>⚠️ IMPORTANTE:</strong> Cambia estas credenciales después del primer acceso por seguridad.
+            </p>
+        </div>
+
+        <div class="cta-section">
+            <h2>¿Listo para comenzar?</h2>
+            <p>Accede al portal de administración y toma control completo de tu sistema de consultorio médico.</p>
+            
+            <div class="cta-buttons">
+                <a href="admin-portal.html" class="btn btn-primary">
+                    <i class="fas fa-rocket"></i>
+                    Acceder al Portal de Administración
+                </a>
+                <a href="login.html" class="btn btn-secondary">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Login Normal
+                </a>
+                <a href="dashboard.html" class="btn btn-secondary">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Dashboard Principal
+                </a>
+            </div>
+        </div>
+
+        <div style="margin-top: 3rem; padding: 2rem; background: white; border-radius: 0.75rem; border: 1px solid #e2e8f0;">
+            <h3>Funcionalidades del Portal de Administración:</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                <div>
+                    <h4 style="color: #1e3a8a; margin-bottom: 0.5rem;">👥 Gestión de Usuarios</h4>
+                    <ul style="font-size: 0.875rem; color: #64748b;">
+                        <li>Crear usuarios con roles específicos</li>
+                        <li>Editar información y permisos</li>
+                        <li>Bloquear/desbloquear cuentas</li>
+                        <li>Resetear contraseñas</li>
+                        <li>Eliminar usuarios (excepto admins)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color: #1e3a8a; margin-bottom: 0.5rem;">🔐 Control de Accesos</h4>
+                    <ul style="font-size: 0.875rem; color: #64748b;">
+                        <li>Asignación de permisos granulares</li>
+                        <li>Control de roles y privilegios</li>
+                        <li>Políticas de seguridad</li>
+                        <li>Sesiones y timeouts</li>
+                        <li>Autenticación avanzada</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color: #1e3a8a; margin-bottom: 0.5rem;">📊 Monitoreo</h4>
+                    <ul style="font-size: 0.875rem; color: #64748b;">
+                        <li>Estadísticas en tiempo real</li>
+                        <li>Gráficos de actividad</li>
+                        <li>Logs de auditoría</li>
+                        <li>Reportes de seguridad</li>
+                        <li>Métricas de uso</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                // Mostrar feedback visual
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✓ Copiado';
+                btn.style.background = '#10b981';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '#f59e0b';
+                }, 2000);
+            }).catch(err => {
+                alert('Error al copiar: ' + err);
+            });
+        }
+    </script>
+</body>
+</html>

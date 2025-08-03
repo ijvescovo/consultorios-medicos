@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios - Consultorio Médico</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .users-container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .users-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; }
+        .stat-number { font-size: 2rem; font-weight: bold; color: var(--primary); }
+        .filters-section { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .filters-row { display: flex; gap: 15px; align-items: end; flex-wrap: wrap; }
+        .filter-group { flex: 1; min-width: 200px; }
+        .users-table { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .table-header { background: var(--primary); color: white; padding: 15px; display: flex; justify-content: between; align-items: center; }
+        .users-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .user-card { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.2s; }
+        .user-card:hover { transform: translateY(-2px); }
+        .user-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .user-avatar { width: 50px; height: 50px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
+        .user-info h3 { margin: 0; color: var(--text-primary); }
+        .user-info p { margin: 5px 0 0 0; color: var(--text-secondary); font-size: 0.9rem; }
+        .role-badge { display: inline-block; padding: 4px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: 500; }
+        .role-admin { background: #fee2e2; color: #dc2626; }
+        .role-medico { background: #dbeafe; color: #2563eb; }
+        .role-recepcionista { background: #d1fae5; color: #059669; }
+        .user-actions { display: flex; gap: 8px; margin-top: 15px; }
+        .btn-sm { padding: 6px 12px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; }
+        .btn-edit { background: #3b82f6; color: white; }
+        .btn-delete { background: #ef4444; color: white; }
+        .btn-password { background: #f59e0b; color: white; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; }
+        .modal-content { background: white; margin: 5% auto; padding: 20px; border-radius: 8px; max-width: 500px; max-height: 90vh; overflow-y: auto; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .close-modal { background: none; border: none; font-size: 1.5rem; cursor: pointer; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 500; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 4px; }
+        .form-row { display: flex; gap: 15px; }
+        .form-row .form-group { flex: 1; }
+        .btn-primary { background: var(--primary); color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+        .btn-secondary { background: #6b7280; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+        .pagination { display: flex; justify-content: center; gap: 10px; margin-top: 20px; }
+        .pagination button { padding: 8px 12px; border: 1px solid #d1d5db; background: white; cursor: pointer; border-radius: 4px; }
+        .pagination button.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .loading { text-align: center; padding: 40px; color: var(--text-secondary); }
+        .no-results { text-align: center; padding: 40px; color: var(--text-secondary); }
+        .alert { padding: 12px 16px; border-radius: 4px; margin-bottom: 20px; }
+        .alert-success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+        .alert-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+    </style>
+</head>
+<body>
+    <div class="users-container">
+        <!-- Header -->
+        <div class="page-header">
+            <div>
+                <h1><i class="fas fa-users"></i> Gestión de Usuarios</h1>
+                <p>Administra usuarios del sistema médico</p>
+            </div>
+            <div>
+                <button class="btn-primary" onclick="showCreateModal()">
+                    <i class="fas fa-plus"></i> Nuevo Usuario
+                </button>
+                <a href="dashboard.html" class="btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver al Dashboard
+                </a>
+            </div>
+        </div>
+
+        <!-- Alertas -->
+        <div id="alertContainer"></div>
+
+        <!-- Estadísticas -->
+        <div class="users-stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalUsers">-</div>
+                <div class="stat-label">Total Usuarios</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalAdmins">-</div>
+                <div class="stat-label">Administradores</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalDoctors">-</div>
+                <div class="stat-label">Médicos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalReceptionists">-</div>
+                <div class="stat-label">Recepcionistas</div>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="filters-section">
+            <div class="filters-row">
+                <div class="filter-group">
+                    <label for="searchInput">Buscar:</label>
+                    <input type="text" id="searchInput" placeholder="Nombre, apellido o email..." 
+                           onkeyup="debounceSearch()" />
+                </div>
+                <div class="filter-group">
+                    <label for="roleFilter">Filtrar por rol:</label>
+                    <select id="roleFilter" onchange="loadUsers()">
+                        <option value="">Todos los roles</option>
+                        <option value="administrador">Administradores</option>
+                        <option value="medico">Médicos</option>
+                        <option value="recepcionista">Recepcionistas</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>&nbsp;</label>
+                    <button class="btn-secondary" onclick="clearFilters()">
+                        <i class="fas fa-times"></i> Limpiar Filtros
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Usuarios -->
+        <div class="users-table">
+            <div class="table-header">
+                <h3><i class="fas fa-list"></i> Lista de Usuarios</h3>
+                <span id="usersCount">Cargando...</span>
+            </div>
+            
+            <div id="usersContainer">
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Cargando usuarios...
+                </div>
+            </div>
+        </div>
+
+        <!-- Paginación -->
+        <div class="pagination" id="pagination"></div>
+    </div>
+
+    <!-- Modal de Crear/Editar Usuario -->
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Nuevo Usuario</h3>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            
+            <form id="userForm">
+                <input type="hidden" id="userId" />
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nombre">Nombre *</label>
+                        <input type="text" id="nombre" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="apellido">Apellido *</label>
+                        <input type="text" id="apellido" required />
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" required />
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="rol">Rol *</label>
+                        <select id="rol" required onchange="toggleMedicoFields()">
+                            <option value="">Seleccionar rol</option>
+                            <option value="administrador">Administrador</option>
+                            <option value="medico">Médico</option>
+                            <option value="recepcionista">Recepcionista</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="passwordGroup">
+                        <label for="password">Contraseña *</label>
+                        <input type="password" id="password" />
+                    </div>
+                </div>
+                
+                <!-- Campos específicos para médicos -->
+                <div id="medicoFields" style="display: none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="matricula">Matrícula *</label>
+                            <input type="text" id="matricula" />
+                        </div>
+                        <div class="form-group">
+                            <label for="especialidad">Especialidad</label>
+                            <input type="text" id="especialidad" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="telefono">Teléfono</label>
+                            <input type="text" id="telefono" />
+                        </div>
+                        <div class="form-group">
+                            <label for="direccion_consultorio">Dirección Consultorio</label>
+                            <input type="text" id="direccion_consultorio" />
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-save"></i> <span id="submitText">Crear Usuario</span>
+                    </button>
+                    <button type="button" class="btn-secondary" onclick="closeModal()">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Cambiar Contraseña -->
+    <div id="passwordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Cambiar Contraseña</h3>
+                <button class="close-modal" onclick="closePasswordModal()">&times;</button>
+            </div>
+            
+            <form id="passwordForm">
+                <input type="hidden" id="passwordUserId" />
+                
+                <div class="form-group">
+                    <label for="newPassword">Nueva Contraseña *</label>
+                    <input type="password" id="newPassword" required minlength="6" />
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmar Contraseña *</label>
+                    <input type="password" id="confirmPassword" required minlength="6" />
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-key"></i> Cambiar Contraseña
+                    </button>
+                    <button type="button" class="btn-secondary" onclick="closePasswordModal()">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/usuarios.js"></script>
+</body>
+</html>
