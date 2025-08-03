@@ -79,11 +79,7 @@ npm start
 npm run dev
 ```
 
-## 🌐 Uso
 
-### Acceso al Sistema
-- **URL**: `http://localhost:5000`
-- **Admin**: `admin@consultorio.com` / `Admin123!`
 
 ### Estructura de URLs
 - `/` - Página principal
