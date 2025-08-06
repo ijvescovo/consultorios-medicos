@@ -1,375 +1,249 @@
 // Sistema de Gestión de Consultorio Médico - Frontend
-// main.js - Funcionalidad principal
+// main.js - Punto de entrada principal (modularizado)
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Inicializar la aplicación
-    initializeApp();
-});
+// Importar módulos (para entornos que soporten ES6 modules)
+// En producción, estos se cargarán como scripts separados para compatibilidad
 
-// Inicialización de la aplicación
-function initializeApp() {
-    // Ocultar loading screen
-    setTimeout(() => {
-        const loadingScreen = document.getElementById('loadingScreen');
-        if (loadingScreen) {
-            loadingScreen.classList.add('hidden');
+class MedicalApp {
+    constructor() {
+        this.modules = {};
+        this.initialized = false;
+        this.init();
+    }
+
+    async init() {
+        // Esperar a que el DOM esté listo
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => this.initialize());
+        } else {
+            await this.initialize();
         }
-    }, 1500);
+    }
 
-    // Inicializar navegación suave
-    initSmoothScrolling();
-    
-    // Inicializar contadores animados
-    initCounterAnimation();
-    
-    // Inicializar formularios
-    initForms();
-    
-    // Inicializar modals
-    initModals();
-    
-    // Inicializar navegación activa
-    initActiveNavigation();
-}
+    async initialize() {
+        if (this.initialized) return;
 
-// Navegación suave
-function initSmoothScrolling() {
-    const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
-    
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
+        console.log('🏥 Inicializando Sistema de Consultorios Médicos...');
+
+        try {
+            // Los módulos ya están cargados como scripts globales
+            // En un entorno más avanzado, usaríamos import() dinámico
             
-            const targetId = this.getAttribute('href').substring(1);
-            const targetElement = document.getElementById(targetId);
+            // Verificar que los módulos estén disponibles
+            this.checkModulesAvailability();
             
-            if (targetElement) {
-                targetElement.scrollIntoView({
+            // Inicializar módulos en orden
+            await this.initializeModules();
+            
+            // Configurar funciones globales para compatibilidad
+            this.setupGlobalFunctions();
+            
+            // Configurar manejo de errores
+            this.setupErrorHandling();
+            
+            this.initialized = true;
+            console.log('✅ Aplicación inicializada correctamente');
+            
+        } catch (error) {
+            console.error('❌ Error al inicializar la aplicación:', error);
+            this.showFallbackMessage();
+        }
+    }
+
+    checkModulesAvailability() {
+        const requiredModules = ['notifications', 'formValidator', 'navigationManager', 'animationManager'];
+        const missingModules = [];
+
+        requiredModules.forEach(moduleName => {
+            if (!window[moduleName]) {
+                missingModules.push(moduleName);
+            }
+        });
+
+        if (missingModules.length > 0) {
+            console.warn('⚠️ Módulos faltantes:', missingModules);
+            // En un entorno de producción, podrías cargar los módulos dinámicamente aquí
+        }
+    }
+
+    async initializeModules() {
+        // Los módulos se auto-inicializan al cargarse
+        // Aquí podemos hacer configuraciones específicas si es necesario
+        
+        // Configurar notificaciones
+        if (window.notifications) {
+            this.modules.notifications = window.notifications;
+        }
+
+        // Configurar validador de formularios
+        if (window.formValidator) {
+            this.modules.forms = window.formValidator;
+        }
+
+        // Configurar navegación
+        if (window.navigationManager) {
+            this.modules.navigation = window.navigationManager;
+        }
+
+        // Configurar animaciones
+        if (window.animationManager) {
+            this.modules.animations = window.animationManager;
+        }
+
+        // Inicializar funcionalidades específicas de la página
+        this.initializePageSpecific();
+    }
+
+    initializePageSpecific() {
+        // Funcionalidades específicas que no están en los módulos
+        this.initModals();
+        this.setupDemoFunctions();
+    }
+
+    setupGlobalFunctions() {
+        // Mantener funciones globales para compatibilidad con HTML existente
+        window.showDemo = this.showDemo.bind(this);
+        window.showContactForm = this.showContactForm.bind(this);
+        window.showFeatures = this.showFeatures.bind(this);
+        window.closeModal = this.closeModal.bind(this);
+    }
+
+    setupErrorHandling() {
+        window.addEventListener('error', (event) => {
+            console.error('Error en la aplicación:', event.error);
+            if (this.modules.notifications) {
+                this.modules.notifications.error('Ha ocurrido un error inesperado');
+            }
+        });
+
+        window.addEventListener('unhandledrejection', (event) => {
+            console.error('Promise rechazada no manejada:', event.reason);
+            if (this.modules.notifications) {
+                this.modules.notifications.error('Error en operación asíncrona');
+            }
+        });
+    }
+
+    showFallbackMessage() {
+        // Mostrar mensaje de error básico si los módulos fallan
+        const message = document.createElement('div');
+        message.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #fef2f2;
+            color: #991b1b;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #fecaca;
+            z-index: 9999;
+        `;
+        message.innerHTML = '⚠️ Error al cargar la aplicación. Recarga la página.';
+        document.body.appendChild(message);
+    }
+
+    // Funciones de Modal (mantenidas para compatibilidad)
+    initModals() {
+        // Cerrar modals al hacer clic fuera
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('active');
+            }
+        });
+        
+        // Cerrar modals con tecla Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const activeModal = document.querySelector('.modal.active');
+                if (activeModal) {
+                    activeModal.classList.remove('active');
+                }
+            }
+        });
+    }
+
+    setupDemoFunctions() {
+        // Funciones específicas de demostración
+        // Se pueden extender aquí según necesidades específicas
+    }
+
+    // Funciones públicas para compatibilidad con HTML existente
+    showDemo() {
+        const modal = document.getElementById('demoModal');
+        if (modal) {
+            modal.classList.add('active');
+        } else {
+            // Si no hay modal, mostrar notificación
+            if (this.modules.notifications) {
+                this.modules.notifications.info('Demo disponible próximamente', {
+                    title: 'Funcionalidad de Demo'
+                });
+            }
+        }
+    }
+
+    showContactForm() {
+        if (this.modules.navigation) {
+            this.modules.navigation.scrollToSection('contacto');
+        } else {
+            // Fallback manual
+            const contactSection = document.getElementById('contacto');
+            if (contactSection) {
+                contactSection.scrollIntoView({
                     behavior: 'smooth',
                     block: 'start'
                 });
-                
-                // Actualizar navegación activa
-                updateActiveNavigation(this);
-            }
-        });
-    });
-}
-
-// Actualizar navegación activa
-function updateActiveNavigation(activeLink) {
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.classList.remove('active');
-    });
-    activeLink.classList.add('active');
-}
-
-// Navegación activa basada en scroll
-function initActiveNavigation() {
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
-    
-    window.addEventListener('scroll', () => {
-        let current = '';
-        
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            
-            if (window.pageYOffset >= sectionTop - 200) {
-                current = section.getAttribute('id');
-            }
-        });
-        
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === `#${current}`) {
-                link.classList.add('active');
-            }
-        });
-    });
-}
-
-// Animación de contadores
-function initCounterAnimation() {
-    const counters = document.querySelectorAll('.stat-number');
-    const animateCounter = (counter) => {
-        const target = parseInt(counter.getAttribute('data-target'));
-        const increment = target / 200;
-        let current = 0;
-        
-        const updateCounter = () => {
-            if (current < target) {
-                current += increment;
-                counter.textContent = Math.ceil(current);
-                requestAnimationFrame(updateCounter);
-            } else {
-                counter.textContent = target;
-            }
-        };
-        
-        updateCounter();
-    };
-    
-    // Observador de intersección para activar animaciones
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const counter = entry.target;
-                if (!counter.classList.contains('animated')) {
-                    counter.classList.add('animated');
-                    animateCounter(counter);
-                }
-            }
-        });
-    }, {
-        threshold: 0.5
-    });
-    
-    counters.forEach(counter => {
-        observer.observe(counter);
-    });
-}
-
-// Inicializar formularios
-function initForms() {
-    const contactForm = document.getElementById('contactForm');
-    
-    if (contactForm) {
-        contactForm.addEventListener('submit', handleContactSubmit);
-    }
-}
-
-// Manejar envío del formulario de contacto
-async function handleContactSubmit(e) {
-    e.preventDefault();
-    
-    const formData = new FormData(e.target);
-    const data = {
-        name: formData.get('name') || document.getElementById('name').value,
-        email: formData.get('email') || document.getElementById('email').value,
-        specialty: formData.get('specialty') || document.getElementById('specialty').value,
-        message: formData.get('message') || document.getElementById('message').value
-    };
-    
-    // Validar formulario
-    if (!validateContactForm(data)) {
-        return;
-    }
-    
-    // Mostrar loading
-    const submitBtn = e.target.querySelector('button[type="submit"]');
-    const originalText = submitBtn.innerHTML;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
-    submitBtn.disabled = true;
-    
-    try {
-        // Simular envío (reemplazar con llamada real a API)
-        await simulateAPICall();
-        
-        // Mostrar mensaje de éxito
-        showMessage('success', '¡Mensaje enviado correctamente! Nos pondremos en contacto contigo pronto.');
-        
-        // Resetear formulario
-        e.target.reset();
-        
-    } catch (error) {
-        console.error('Error al enviar formulario:', error);
-        showMessage('error', 'Error al enviar el mensaje. Por favor, intenta nuevamente.');
-    } finally {
-        // Restaurar botón
-        submitBtn.innerHTML = originalText;
-        submitBtn.disabled = false;
-    }
-}
-
-// Validar formulario de contacto
-function validateContactForm(data) {
-    const errors = [];
-    
-    if (!data.name || data.name.trim().length < 2) {
-        errors.push('El nombre debe tener al menos 2 caracteres');
-    }
-    
-    if (!data.email || !isValidEmail(data.email)) {
-        errors.push('Ingresa un email válido');
-    }
-    
-    if (!data.specialty) {
-        errors.push('Selecciona una especialidad');
-    }
-    
-    if (!data.message || data.message.trim().length < 10) {
-        errors.push('El mensaje debe tener al menos 10 caracteres');
-    }
-    
-    if (errors.length > 0) {
-        showMessage('error', errors.join('<br>'));
-        return false;
-    }
-    
-    return true;
-}
-
-// Validar email
-function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
-
-// Mostrar mensajes
-function showMessage(type, message) {
-    // Crear elemento de mensaje
-    const messageEl = document.createElement('div');
-    messageEl.className = `message ${type}`;
-    messageEl.innerHTML = `
-        <div class="message-content">
-            <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
-            <span>${message}</span>
-        </div>
-        <button class="close-message" onclick="this.parentElement.remove()">
-            <i class="fas fa-times"></i>
-        </button>
-    `;
-    
-    // Agregar estilos CSS si no existen
-    if (!document.querySelector('#message-styles')) {
-        const styles = document.createElement('style');
-        styles.id = 'message-styles';
-        styles.textContent = `
-            .message {
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 1rem 1.5rem;
-                border-radius: 0.5rem;
-                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-                z-index: 9999;
-                max-width: 400px;
-                animation: slideInRight 0.3s ease-out;
-            }
-            
-            .message.success {
-                background: #f0fdf4;
-                color: #166534;
-                border: 1px solid #bbf7d0;
-            }
-            
-            .message.error {
-                background: #fef2f2;
-                color: #991b1b;
-                border: 1px solid #fecaca;
-            }
-            
-            .message-content {
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-            }
-            
-            .close-message {
-                position: absolute;
-                top: 0.5rem;
-                right: 0.5rem;
-                background: none;
-                border: none;
-                cursor: pointer;
-                opacity: 0.5;
-                transition: opacity 0.2s;
-            }
-            
-            .close-message:hover {
-                opacity: 1;
-            }
-            
-            @keyframes slideInRight {
-                from {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-            }
-        `;
-        document.head.appendChild(styles);
-    }
-    
-    // Agregar al DOM
-    document.body.appendChild(messageEl);
-    
-    // Auto remover después de 5 segundos
-    setTimeout(() => {
-        if (messageEl.parentElement) {
-            messageEl.remove();
-        }
-    }, 5000);
-}
-
-// Inicializar modals
-function initModals() {
-    // Cerrar modals al hacer clic fuera
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('modal')) {
-            e.target.classList.remove('active');
-        }
-    });
-    
-    // Cerrar modals con tecla Escape
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            const activeModal = document.querySelector('.modal.active');
-            if (activeModal) {
-                activeModal.classList.remove('active');
             }
         }
-    });
-}
+    }
 
-// Funciones para mostrar modals
-function showDemo() {
-    const modal = document.getElementById('demoModal');
-    if (modal) {
-        modal.classList.add('active');
+    showFeatures() {
+        if (this.modules.navigation) {
+            this.modules.navigation.scrollToSection('servicios');
+        } else {
+            // Fallback manual
+            const featuresSection = document.getElementById('servicios');
+            if (featuresSection) {
+                featuresSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+    }
+
+    closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.remove('active');
+        }
+    }
+
+    // Métodos públicos para acceso externo
+    getModule(moduleName) {
+        return this.modules[moduleName];
+    }
+
+    isInitialized() {
+        return this.initialized;
+    }
+
+    // Método para reinicializar si es necesario
+    async reinitialize() {
+        this.initialized = false;
+        await this.initialize();
     }
 }
 
-function showContactForm() {
-    const contactSection = document.getElementById('contacto');
-    if (contactSection) {
-        contactSection.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        });
-    }
+// Crear instancia global de la aplicación
+const medicalApp = new MedicalApp();
+
+// Hacer disponible globalmente
+if (typeof window !== 'undefined') {
+    window.medicalApp = medicalApp;
 }
 
-function showFeatures() {
-    const featuresSection = document.getElementById('servicios');
-    if (featuresSection) {
-        featuresSection.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        });
-    }
-}
-
-function closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.classList.remove('active');
-    }
-}
-
-// Simular llamada a API
-function simulateAPICall() {
-    return new Promise((resolve) => {
-        setTimeout(resolve, 2000);
-    });
-}
-
-// Utilidades adicionales
+// Utilidades globales para compatibilidad
 const Utils = {
     // Formatear fecha
     formatDate: (date) => {
@@ -413,12 +287,17 @@ const Utils = {
                 setTimeout(() => inThrottle = false, limit);
             }
         };
+    },
+
+    // Simular llamada a API
+    simulateAPICall: (delay = 2000) => {
+        return new Promise((resolve) => {
+            setTimeout(resolve, delay);
+        });
     }
 };
 
-// Hacer disponibles las funciones globalmente
-window.showDemo = showDemo;
-window.showContactForm = showContactForm;
-window.showFeatures = showFeatures;
-window.closeModal = closeModal;
-window.Utils = Utils;
+// Hacer Utils disponible globalmente
+if (typeof window !== 'undefined') {
+    window.Utils = Utils;
+}
