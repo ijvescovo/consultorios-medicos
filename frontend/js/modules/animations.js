@@ -364,8 +364,6 @@ class AnimationManager {
 // Crear instancia global
 const animationManager = new AnimationManager();
 
-export default animationManager;
-
 // También hacer disponible globalmente para compatibilidad
 if (typeof window !== 'undefined') {
     window.animationManager = animationManager;

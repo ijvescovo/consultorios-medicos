@@ -294,9 +294,6 @@ class NotificationSystem {
 // Crear instancia global
 const notifications = new NotificationSystem();
 
-// Exportar para uso modular
-export default notifications;
-
 // También hacer disponible globalmente para compatibilidad
 if (typeof window !== 'undefined') {
     window.notifications = notifications;

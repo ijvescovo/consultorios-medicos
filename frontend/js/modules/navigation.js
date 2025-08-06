@@ -346,8 +346,6 @@ class NavigationManager {
 // Crear instancia global
 const navigationManager = new NavigationManager();
 
-export default navigationManager;
-
 // También hacer disponible globalmente para compatibilidad
 if (typeof window !== 'undefined') {
     window.navigationManager = navigationManager;

@@ -382,8 +382,6 @@ class FormValidator {
 // Crear instancia global
 const formValidator = new FormValidator();
 
-export default formValidator;
-
 // También hacer disponible globalmente para compatibilidad
 if (typeof window !== 'undefined') {
     window.formValidator = formValidator;
